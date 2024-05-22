@@ -12,13 +12,12 @@ public class DelaunayTriangulator {
     private final ArrayList<Point2D.Double> points;
     private final ArrayList<Triangle> triangles;
     private final ArrayList<DelaunayNotInsertedPoint> notInsertedPoints;
-    private final ArrayList<DelaunayHalfEdge> magicHalfEdges = new ArrayList<>();
     private int triangleId = 0;
     /**
      * A hashmap of half-edges that uses half-edge start and endpoint ids as key
      */
-    private HashMap<Pair<Integer, Integer>, DelaunayHalfEdge> halfEdges;
-    private int[] ids;
+    private final HashMap<Pair<Integer, Integer>, DelaunayHalfEdge> halfEdges;
+//    private int[] ids;
 
     private int e1 = 0;
     private int e2 = 0;
@@ -30,61 +29,39 @@ public class DelaunayTriangulator {
         Collections.shuffle(this.points);
 
         this.triangles = new ArrayList<>();
-        // Create a list of points not yet inserted into the triangulation
-        // and add all given points there, setting their triangleId to id of
-        // the magic triangle mentioned and created below
         this.notInsertedPoints = new ArrayList<>();
+
+        this.halfEdges = new HashMap<>();
+
+//        this.ids = new int[n + 3];
+//        for (int i = 0; i < n; i++) this.ids[i] = i;
+//        this.ids[n] = -3;
+//        this.ids[n + 1] = -2;
+//        this.ids[n + 2] = -1;
+
+        this.update();
+    }
+
+    // Here the insertion of points happens.
+    // Why is it called update? Because this method is meant to be called
+    // when the list we passed into the constructor when creating DelaunayTriangulator object
+    // is mutated
+    public void update() {
+        // Before adding any points, we create that magic triangle from
+        // https://www.coursera.org/lecture/geometric-algorithms/randomized-incremental-construction-analysis-6l1Pf.
+        // The vertices of the magic triangle are stored as nth,
+        // n+1st and n+2nd points, they are ordered counter-clockwise.
+        this.halfEdges.clear();
+        this.triangles.clear();
+
+        final int n = points.size();
+        this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
+        // and link all points to the triangle
         this.notInsertedPoints.addAll(
                 this.points.stream().map(
                         point -> new DelaunayNotInsertedPoint(point, 0)
                 ).toList()
         );
-
-        final int n = points.size();
-        final int maxTriangles = Math.max(2 * n - 5, 0);
-        this.halfEdges = new HashMap<>();
-//        this.triangles = new int[maxTriangles * 3];
-//        this.halfedges = new int[maxTriangles * 3];
-
-        this.ids = new int[n + 3];
-        for (int i = 0; i < n; i++) this.ids[i] = i;
-        this.ids[n] = -3;
-        this.ids[n + 1] = -2;
-        this.ids[n + 2] = -1;
-
-        this.update();
-    }
-
-    public void update() {
-        //find region which contains all the points
-        double minX = Double.POSITIVE_INFINITY;
-        double minY = Double.POSITIVE_INFINITY;
-        double maxX = Double.NEGATIVE_INFINITY;
-        double maxY = Double.NEGATIVE_INFINITY;
-
-        for (int i = 0; i < points.size(); i++) {
-            final double x = points.get(i).x;
-            final double y = points.get(i).y;
-            if (x < minX) minX = x;
-            if (y < minY) minY = y;
-            if (x > maxX) maxX = x;
-            if (y > maxY) maxY = y;
-            this.ids[i] = i;
-        }
-
-        final double cx = (minX + maxX) / 2;
-        final double cy = (minY + maxY) / 2;
-
-        // assume the following: the circumcircle of the aforementioned region
-        // will be the incircle of that magic triangle of https://www.coursera.org/lecture/geometric-algorithms/randomized-incremental-construction-analysis-6l1Pf
-        // TODO: this magic triangle or just symbolic treatment
-
-        // symbolic : the vertices of the magic triangle are stored as nth,
-        // n+1st and n+2nd points, they are ordered counter-clockwise.
-
-        // before adding any points, we create that magic triangle
-        final int n = points.size();
-        this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
 
         for (int i = 0; i < n; i++) {
             // get ith not-inserted point
@@ -94,8 +71,6 @@ public class DelaunayTriangulator {
             Triangle tr = triangles.get(id);
             // get other points that the triangle contains
             ArrayList<DelaunayNotInsertedPoint> pointsInTriangle = tr.getContainedPoints();
-            // used because stupid java doesn't like iteration vars inside lambdas as "they're not final oooh"
-            final int finalI = i;
             // separate the points between three future triangles
             ArrayList<DelaunayNotInsertedPoint> pointsInSubTr1 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
             ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
@@ -110,16 +85,25 @@ public class DelaunayTriangulator {
             this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), id);
         }
 
+        this.notInsertedPoints.clear();
+
         // in the end of triangulation, magic triangle vertices are deleted
         // or just ignored when drawing idk
     }
 
+    /**
+     * @param pointList list of points
+     * @param i1        triangle vertex 1
+     * @param i2        triangle vertex 2
+     * @param i3        triangle vertex 3
+     * @return list of points inside the triangle bound by i1, i2 and i3
+     */
     private ArrayList<DelaunayNotInsertedPoint>
-    pointsInsideSubTriangle(ArrayList<DelaunayNotInsertedPoint> pointsInTriangle,
+    pointsInsideSubTriangle(ArrayList<DelaunayNotInsertedPoint> pointList,
                             int i1,
                             int i2,
                             int i3) {
-        return (ArrayList<DelaunayNotInsertedPoint>) pointsInTriangle.stream().filter(pt ->
+        return (ArrayList<DelaunayNotInsertedPoint>) pointList.stream().filter(pt ->
                 Geometric.liesInsideTriangle(
                         this.points.get(i1),
                         this.points.get(i2),
