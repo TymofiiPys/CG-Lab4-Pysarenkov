@@ -224,9 +224,23 @@ public class DelaunayTriangulator {
             //TODO: change point bucket id
             //
             // I checked and it seems that these points are indeed ordered counter-clockwise
-            // Flip edges by constructing 2 new triangles
-            this.addTriangle(twin.getStart(), pointId, pdId);
-            this.addTriangle(twin.getEnd(), pdId, pointId);
+            // Flip edge
+            // Get points from triangles incident to edge to be flipped and its twin
+            ArrayList<DelaunayNotInsertedPoint> pointsInOldSubTrs = triangles.get(edge.getTriangle()).getContainedPoints();
+            pointsInOldSubTrs.addAll(triangleTwin.getContainedPoints());
+            // Find points contained in new triangles
+            ArrayList<DelaunayNotInsertedPoint> pointsInNewSubTr1 =
+                    this.pointsInsideSubTriangle(
+                            pointsInOldSubTrs, twin.getStart(), pointId, pdId
+                    );
+
+            ArrayList<DelaunayNotInsertedPoint> pointsInNewSubTr2 =
+                    this.pointsInsideSubTriangle(
+                            pointsInOldSubTrs, twin.getEnd(), pdId, pointId
+                    );
+            // Construct 2 new triangles with flipped edge
+            this.addTriangle(twin.getStart(), pointId, pdId, pointsInNewSubTr1);
+            this.addTriangle(twin.getEnd(), pdId, pointId, pointsInNewSubTr2);
             // Legalize them :)
             this.legalize(this.halfEdges.get(new Pair<>(twin.getEnd(), pdId)), pointId);
             this.legalize(this.halfEdges.get(new Pair<>(pdId, twin.getStart())), pointId);
