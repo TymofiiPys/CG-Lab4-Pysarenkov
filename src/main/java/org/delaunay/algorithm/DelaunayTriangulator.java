@@ -1,27 +1,50 @@
 package org.delaunay.algorithm;
 
-import lombok.Getter;
-
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
+
+import javafx.util.Pair;
+import org.delaunay.util.Geometric;
 
 public class DelaunayTriangulator {
     private final ArrayList<Point2D.Double> points;
-    private int[] triangles;
-    private int triangleLen = 0;
-    private int[] halfedges;
+    private final ArrayList<Triangle> triangles;
+    private final ArrayList<DelaunayNotInsertedPoint> notInsertedPoints;
+    private final ArrayList<DelaunayHalfEdge> magicHalfEdges = new ArrayList<>();
+    private int triangleId = 0;
+    /**
+     * A hashmap of half-edges that uses half-edge start and endpoint ids as key
+     */
+    private HashMap<Pair<Integer, Integer>, DelaunayHalfEdge> halfEdges;
     private int[] ids;
+
+    private int e1 = 0;
+    private int e2 = 0;
+    private int e3 = 0;
+
     public DelaunayTriangulator(ArrayList<Point2D.Double> points) {
         // Shuffle points because we use Random incremental construction
         this.points = points;
         Collections.shuffle(this.points);
 
+        this.triangles = new ArrayList<>();
+        // Create a list of points not yet inserted into the triangulation
+        // and add all given points there, setting their triangleId to id of
+        // the magic triangle mentioned and created below
+        this.notInsertedPoints = new ArrayList<>();
+        this.notInsertedPoints.addAll(
+                this.points.stream().map(
+                        point -> new DelaunayNotInsertedPoint(point, 0)
+                ).toList()
+        );
+
         final int n = points.size();
         final int maxTriangles = Math.max(2 * n - 5, 0);
-        this.triangles = new int[maxTriangles * 3];
-        this.halfedges = new int[maxTriangles * 3];
+        this.halfEdges = new HashMap<>();
+//        this.triangles = new int[maxTriangles * 3];
+//        this.halfedges = new int[maxTriangles * 3];
 
         this.ids = new int[n + 3];
         for (int i = 0; i < n; i++) this.ids[i] = i;
@@ -59,64 +82,154 @@ public class DelaunayTriangulator {
         // symbolic : the vertices of the magic triangle are stored as nth,
         // n+1st and n+2nd points, they are ordered counter-clockwise.
 
-        // before adding any points, we add that magic triangle
-        this.addTriangle()
+        // before adding any points, we create that magic triangle
+        final int n = points.size();
+        this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
 
-        for (int i = 0; i < points.size(); i++) {
-            Point2D.Double p = points.get(i);
-
+        for (int i = 0; i < n; i++) {
+            // get ith not-inserted point
+            final DelaunayNotInsertedPoint point = this.notInsertedPoints.get(i);
+            // get the triangle the point's in
+            final int id = point.getTriangleId();
+            Triangle tr = triangles.get(id);
+            // get other points that the triangle contains
+            ArrayList<DelaunayNotInsertedPoint> pointsInTriangle = tr.getContainedPoints();
+            // used because stupid java doesn't like iteration vars inside lambdas as "they're not final oooh"
+            final int finalI = i;
+            // separate the points between three future triangles
+            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr1 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
+            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
+            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr3 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
+            // create the triangles
+            this.addTriangle(tr.getId1(), tr.getId2(), i, pointsInSubTr1);
+            this.addTriangle(tr.getId2(), tr.getId3(), i, pointsInSubTr2);
+            this.addTriangle(tr.getId3(), tr.getId1(), i, pointsInSubTr3);
+            // and legalize edges
+            this.legalize(this.halfEdges.get(new Pair<>(tr.getId1(), tr.getId2())), id);
+            this.legalize(this.halfEdges.get(new Pair<>(tr.getId2(), tr.getId3())), id);
+            this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), id);
         }
+
+        // in the end of triangulation, magic triangle vertices are deleted
+        // or just ignored when drawing idk
+    }
+
+    private ArrayList<DelaunayNotInsertedPoint>
+    pointsInsideSubTriangle(ArrayList<DelaunayNotInsertedPoint> pointsInTriangle,
+                            int i1,
+                            int i2,
+                            int i3) {
+        return (ArrayList<DelaunayNotInsertedPoint>) pointsInTriangle.stream().filter(pt ->
+                Geometric.liesInsideTriangle(
+                        this.points.get(i1),
+                        this.points.get(i2),
+                        this.points.get(i3),
+                        pt.getLocation()
+                ) && !pt.getLocation().equals(this.points.get(i3))
+        ).toList();
     }
 
     /**
+     * Adds a triangle, constructing edges.
+     * Note: i1-th, i2-th and i3-th points must be ordered counter-clockwise
      *
-     * @param i0 index of point to add to a triangle
      * @param i1 index of point to add to a triangle
      * @param i2 index of point to add to a triangle
-     * @param a halfedge id associated with i0
-     * @param b halfedge id associated with i1
-     * @param c halfedge id associated with i2
-     * @return
+     * @param i3 index of point to add to a triangle
      */
-    private int addTriangle(int i0, int i1, int i2, int a, int b, int c) {
-        final int t = this.triangleLen;
-        this.triangles[t] = i0;
-        this.triangles[t + 1] = i1;
-        this.triangles[t + 2] = i2;
+    private void addTriangle(int i1, int i2, int i3, ArrayList<DelaunayNotInsertedPoint> pointsInsideTriangle) {
+        // Create half-edges
+        // (two of them will exist if the triangle is created as a result of edge flip,
+        // then just change id of triangle the HEs point at)
+        DelaunayHalfEdge edge1 = createEdgeIfDoesntExist(i1, i2, triangleId);
+        DelaunayHalfEdge edge2 = createEdgeIfDoesntExist(i2, i3, triangleId);
+        DelaunayHalfEdge edge3 = createEdgeIfDoesntExist(i3, i1, triangleId);
+        // Find and link them to their twins
+        DelaunayHalfEdge edge1twin = this.halfEdges.get(new Pair<>(i2, i1));
+        DelaunayHalfEdge edge2twin = this.halfEdges.get(new Pair<>(i3, i2));
+        DelaunayHalfEdge edge3twin = this.halfEdges.get(new Pair<>(i1, i3));
+        if (edge1twin != null) {
+            edge1.setTwin(edge1twin);
+            edge1twin.setTwin(edge1);
+        }
+        if (edge2twin != null) {
+            edge2.setTwin(edge2twin);
+            edge2twin.setTwin(edge2);
+        }
+        if (edge3twin != null) {
+            edge3.setTwin(edge3twin);
+            edge3twin.setTwin(edge3);
+        }
+        // Make points of the list point to this triangle
+        pointsInsideTriangle.forEach(pt -> pt.setTriangleId(triangleId));
+        // And create the triangle and link edges to it
+        this.triangles.add(new Triangle(i1, i2, i3, pointsInsideTriangle));
+        edge1.setTriangle(triangleId);
+        edge2.setTriangle(triangleId);
+        edge3.setTriangle(triangleId);
+        triangleId++;
+        //TODO: legalization and contain points
+    }
 
-        this.triangleLen += 3;
-        return t;
+    private DelaunayHalfEdge createEdgeIfDoesntExist(int startId, int endId, int triangleId) {
+        DelaunayHalfEdge edge;
+        if (this.halfEdges.containsKey(new Pair<>(startId, endId))) {
+            edge = this.halfEdges.get(new Pair<>(startId, endId));
+            edge.setTriangle(triangleId);
+        } else {
+            edge = new DelaunayHalfEdge(startId, endId);
+            this.halfEdges.put(new Pair<>(startId, endId), edge);
+        }
+        return edge;
     }
 
     private void insertPoint() {
 
     }
 
-    private void legalize() {
-
-    }
-
-    class TriangleGraph {
-        private final Node root;
-        TriangleGraph(Triangle rootTr) {
-            this.root = new Node(rootTr);
+    /**
+     * Legalize edge
+     *
+     * @param edge    edge to legalize
+     * @param pointId id of the point that is not an endpoint of {@code edge}
+     */
+    private void legalize(DelaunayHalfEdge edge, int pointId) {
+        // Get edge twin if it exists
+        DelaunayHalfEdge twin = edge.getTwin();
+        if (twin == null) return;
+        // Get the triangle the twin points at and
+        // get id of the point that is not an endpoint of the twin
+        int triangleTwinId = twin.getTriangle();
+        Triangle triangleTwin = this.triangles.get(triangleTwinId);
+        int pdId = -1;
+        if (triangleTwin.getId1() != twin.getStart() && triangleTwin.getId1() != twin.getEnd()) {
+            pdId = triangleTwin.getId1();
+            e1++;
+        } else if (triangleTwin.getId2() != twin.getStart() && triangleTwin.getId2() != twin.getEnd()) {
+            pdId = triangleTwin.getId2();
+            e2++;
+        } else if (triangleTwin.getId3() != twin.getStart() && triangleTwin.getId3() != twin.getEnd()) {
+            pdId = triangleTwin.getId3();
+            e3++;
+        } else {
+            System.out.println("IMPOSSIBLE");
         }
-        @Getter
-        private class Node {
-            private final Triangle t;
-            private final ArrayList<Triangle> children;
-            Node(Triangle t) {
-                this.t = t;
-                this.children = new ArrayList<>();
-            }
-
-            private void split(Point2D.Double p) {
-                int
-            }
-        }
-
-        public void insertPoint(Point2D.Double p) {
-
+        // now get the points by their ids and do the incircle test
+        Point2D.Double pa = this.points.get(pointId);
+        Point2D.Double pb = this.points.get(twin.getStart());
+        Point2D.Double pc = this.points.get(twin.getEnd());
+        Point2D.Double pd = this.points.get(pdId);
+        boolean illegal = Geometric.inCircle(pa, pb, pc, pd);
+        if (illegal) {
+            //TODO: change point bucket id
+            //
+            // I checked and it seems that these points are indeed ordered counter-clockwise
+            // Flip edges by constructing 2 new triangles
+            this.addTriangle(twin.getStart(), pointId, pdId);
+            this.addTriangle(twin.getEnd(), pdId, pointId);
+            // Legalize them :)
+            this.legalize(this.halfEdges.get(new Pair<>(twin.getEnd(), pdId)), pointId);
+            this.legalize(this.halfEdges.get(new Pair<>(pdId, twin.getStart())), pointId);
         }
     }
 }
