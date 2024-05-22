@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="some more geom tests">
+    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="Add descr to DelaunayHalfEdge, add javafx">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayHalfEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayHalfEdge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" afterDir="false" />
     </list>
@@ -122,7 +120,7 @@
       <workItem from="1716066183922" duration="95000" />
       <workItem from="1716123782747" duration="12668000" />
       <workItem from="1716312827794" duration="5468000" />
-      <workItem from="1716373493648" duration="2237000" />
+      <workItem from="1716373493648" duration="2490000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -156,7 +154,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716319307627</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add descr to DelaunayHalfEdge, add javafx">
+      <option name="closed" value="true" />
+      <created>1716375861389</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1716375861389</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -167,6 +173,7 @@
     <MESSAGE value="geometric functions necessary for the algorithm, started triangulator" />
     <MESSAGE value="add half-edge structure, points yet to be inserted" />
     <MESSAGE value="some more geom tests" />
-    <option name="LAST_COMMIT_MESSAGE" value="some more geom tests" />
+    <MESSAGE value="Add descr to DelaunayHalfEdge, add javafx" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add descr to DelaunayHalfEdge, add javafx" />
   </component>
 </project>
