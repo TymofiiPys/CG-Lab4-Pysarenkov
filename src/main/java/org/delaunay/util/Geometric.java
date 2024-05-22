@@ -59,4 +59,13 @@ public class Geometric {
 
         return new Point2D.Double(x, y);
     }
+
+    public static boolean liesInsideTriangle(Point2D.Double a, Point2D.Double b, Point2D.Double c, Point2D.Double p) {
+        // TODO: test
+        double denominator = (b.y - c.y) * (a.x - c.x) + (c.x - b.x) * (a.y - c.y);
+        double ad = ((b.y - c.y) * (p.x - c.x) + (c.x - b.x) * (p.y - c.y)) / denominator;
+        double bd = ((c.y - a.y) * (p.x - c.x) + (a.x - c.x) * (p.y - c.y)) / denominator;
+        double cd = 1 - ad - bd;
+        return ad >= 0 && bd >= 0 && cd >= 0;
+    }
 }
