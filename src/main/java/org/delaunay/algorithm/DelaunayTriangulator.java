@@ -22,6 +22,8 @@ public class DelaunayTriangulator {
      * A hashmap of half-edges that uses half-edge start and endpoint ids as key
      */
     private final HashMap<Pair<Integer, Integer>, DelaunayHalfEdge> halfEdges;
+    private String lastEventInfo;
+
 //    private int[] ids;
 
     private int e1 = 0;
@@ -235,5 +237,14 @@ public class DelaunayTriangulator {
             this.legalize(this.halfEdges.get(new Pair<>(twin.getEnd(), pdId)), pointId);
             this.legalize(this.halfEdges.get(new Pair<>(pdId, twin.getStart())), pointId);
         }
+    }
+
+    public void nextEvent() {
+
+    }
+
+    public void formLastEventInfo() {
+        lastEventInfo = "<html>Координата останньої<br>" +
+                "вставленої точки: (" + Math.round(points.get(curPointId).x) + ", " + Math.round(points.get(curPointId).y) + ") </html>";
     }
 }

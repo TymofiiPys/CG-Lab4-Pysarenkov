@@ -88,7 +88,7 @@ public class DTDrawer {
     }
 
     public DTInfo nextEvent() {
-        BO.nextEvent();
+        DT.nextEvent();
         this.drawDT();
         return new DTInfo(
                 DT.getPoints().size(),
