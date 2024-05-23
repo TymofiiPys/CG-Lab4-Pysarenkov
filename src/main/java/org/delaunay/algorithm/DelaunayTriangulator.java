@@ -49,6 +49,45 @@ public class DelaunayTriangulator {
         this.update();
     }
 
+    //Called when doing everything step-by-step
+    public void nextEvent() {
+        if (curPointId == points.size()) return;
+        if (curPointId == 0) {
+            this.halfEdges.clear();
+            this.triangles.clear();
+
+            final int n = points.size();
+            this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
+            // and link all points to the triangle
+            this.notInsertedPoints.addAll(
+                    this.points.stream().map(
+                            point -> new DelaunayNotInsertedPoint(point, 0)
+                    ).toList()
+            );
+        }
+        // get ith not-inserted point
+        final DelaunayNotInsertedPoint point = this.notInsertedPoints.get(curPointId);
+        // get the triangle the point's in
+        final int triangleId = point.getTriangleId();
+        Triangle tr = triangles.get(triangleId);
+        // get other points that the triangle contains
+        ArrayList<DelaunayNotInsertedPoint> pointsInTriangle = tr.getContainedPoints();
+        // separate the points between three future triangles
+        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr1 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), curPointId);
+        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), curPointId);
+        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr3 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), curPointId);
+        // create the triangles
+        this.addTriangle(tr.getId1(), tr.getId2(), curPointId, pointsInSubTr1);
+        this.addTriangle(tr.getId2(), tr.getId3(), curPointId, pointsInSubTr2);
+        this.addTriangle(tr.getId3(), tr.getId1(), curPointId, pointsInSubTr3);
+        // and legalize edges
+        this.legalize(this.halfEdges.get(new Pair<>(tr.getId1(), tr.getId2())), curPointId);
+        this.legalize(this.halfEdges.get(new Pair<>(tr.getId2(), tr.getId3())), curPointId);
+        this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), curPointId);
+        this.curPointId++;
+        if (curPointId == points.size()) this.notInsertedPoints.clear();
+    }
+
     // Here the insertion of points happens.
     // Why is it called update? Because this method is meant to be called
     // when the list we passed into the constructor when creating DelaunayTriangulator object
@@ -237,10 +276,6 @@ public class DelaunayTriangulator {
             this.legalize(this.halfEdges.get(new Pair<>(twin.getEnd(), pdId)), pointId);
             this.legalize(this.halfEdges.get(new Pair<>(pdId, twin.getStart())), pointId);
         }
-    }
-
-    public void nextEvent() {
-
     }
 
     public void formLastEventInfo() {

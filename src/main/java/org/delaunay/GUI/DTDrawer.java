@@ -75,13 +75,13 @@ public class DTDrawer {
         }
         // Draw inserted points
         gr.setColor(insertedPointColor);
-        for (int i = 0; i <= DT.getCurPointId(); i++) {
+        for (int i = 0; i < DT.getCurPointId(); i++) {
             Point2D.Double p = adaptToPanel(points.get(i), panelOffsets);
             gr.fillOval((int) (p.x - nodesRad), (int) (p.y - nodesRad), 2 * nodesRad, 2 * nodesRad);
         }
         // Draw inserted points
         gr.setColor(notInsertedPointColor);
-        for (int i = DT.getCurPointId() + 1; i < points.size(); i++) {
+        for (int i = DT.getCurPointId(); i < points.size(); i++) {
             Point2D.Double p = adaptToPanel(points.get(i), panelOffsets);
             gr.fillOval((int) (p.x - nodesRad), (int) (p.y - nodesRad), 2 * nodesRad, 2 * nodesRad);
         }
@@ -92,7 +92,7 @@ public class DTDrawer {
         this.drawDT();
         return new DTInfo(
                 DT.getPoints().size(),
-                DT.getCurPointId(),
+                DT.getCurPointId() - 1,
                 DT.getLastEventInfo()
         );
     }
