@@ -18,7 +18,7 @@ public class DTDrawer {
     private final Color insertedPointColor = Color.GREEN;
     private final Color edgesColor = Color.RED;
     @Setter
-    private int[] offsets = new int[]{0, 0};
+    private int[] offsets = new int[]{-250, -250};
 
     public DTDrawer(JPanel panelDraw) {
         this.panelDraw = panelDraw;

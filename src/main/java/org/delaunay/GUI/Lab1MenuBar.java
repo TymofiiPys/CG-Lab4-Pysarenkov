@@ -1,11 +1,13 @@
 package org.delaunay.GUI;
 
+import lombok.extern.java.Log;
 import org.delaunay.util.PointParser;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
+@Log
 public class Lab1MenuBar extends JMenuBar {
     public StringBuilder filePath = new StringBuilder();
 
@@ -25,6 +27,7 @@ public class Lab1MenuBar extends JMenuBar {
         };
         openMI.addActionListener(new OpenFileDialogActionListener(parent, textFilesFilter, filePath, () -> {
             mw.dtDrawer.setPoints(PointParser.readFromFile(filePath.toString()));
+            log.info("Parsed points from file " + filePath.toString());
             mw.nextEventButton.setEnabled(true);
             mw.dtDrawer.drawDT();
             mw.clearEventBoxes();

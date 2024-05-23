@@ -1,6 +1,7 @@
 package org.delaunay.algorithm;
 
 import lombok.Data;
+import lombok.ToString;
 
 /**
  * Represents a half-edge, containing start, endpoint ids, id of a triangle to the left and
@@ -9,9 +10,11 @@ import lombok.Data;
  * and the half-edge is the value.
  */
 @Data
+@ToString
 public class DelaunayHalfEdge {
     private final int start;
     private final int end;
     private int triangle;
+    @ToString.Exclude
     private DelaunayHalfEdge twin;
 }

@@ -34,10 +34,10 @@ public class DelaunayTriangulator {
         // Shuffle points because we use Random incremental construction
         this.points = points;
         Collections.shuffle(this.points);
+        log.info("Created DelaunayTriangulator, got " + points.size() + " points, shuffled");
 
         this.triangles = new ArrayList<>();
         this.notInsertedPoints = new ArrayList<>();
-
         this.halfEdges = new HashMap<>();
 
 //        this.ids = new int[n + 3];
@@ -46,30 +46,39 @@ public class DelaunayTriangulator {
 //        this.ids[n + 1] = -2;
 //        this.ids[n + 2] = -1;
 
-        this.update();
+//        this.update();
     }
 
     //Called when doing everything step-by-step
     public void nextEvent() {
-        if (curPointId == points.size()) return;
+        if (curPointId == points.size())
+            return;
         if (curPointId == 0) {
             this.halfEdges.clear();
             this.triangles.clear();
 
             final int n = points.size();
-            this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
-            // and link all points to the triangle
+            // link all points to the triangle
             this.notInsertedPoints.addAll(
                     this.points.stream().map(
                             point -> new DelaunayNotInsertedPoint(point, 0)
-                    ).toList()
-            );
+                    ).toList());
+            //and create the triangle
+            this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
+
+            log.info("Created list of " + points.size() + " not inserted points");
+            log.info("=========================================================");
         }
+
         // get ith not-inserted point
         final DelaunayNotInsertedPoint point = this.notInsertedPoints.get(curPointId);
+        log.info("Processing " + curPointId + "th point:");
+
         // get the triangle the point's in
         final int triangleId = point.getTriangleId();
         Triangle tr = triangles.get(triangleId);
+        log.info("Contained in triangle #" + triangleId + ": " + tr.toString());
+
         // get other points that the triangle contains
         ArrayList<DelaunayNotInsertedPoint> pointsInTriangle = tr.getContainedPoints();
         // separate the points between three future triangles
@@ -86,6 +95,7 @@ public class DelaunayTriangulator {
         this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), curPointId);
         this.curPointId++;
         if (curPointId == points.size()) this.notInsertedPoints.clear();
+        log.info("=========================================================");
     }
 
     // Here the insertion of points happens.
@@ -101,13 +111,13 @@ public class DelaunayTriangulator {
         this.triangles.clear();
 
         final int n = points.size();
-        this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
-        // and link all points to the triangle
+        // link all points to the triangle
         this.notInsertedPoints.addAll(
                 this.points.stream().map(
                         point -> new DelaunayNotInsertedPoint(point, 0)
-                ).toList()
-        );
+                ).toList());
+        //and create the triangle
+        this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
 
         for (int i = 0; i < n; i++) {
             // get ith not-inserted point
@@ -150,6 +160,7 @@ public class DelaunayTriangulator {
                             int i1,
                             int i2,
                             int i3) {
+        // TODO: checking points inside triangle bound by magic triangle vertices
         return (ArrayList<DelaunayNotInsertedPoint>) pointList.stream().filter(pt ->
                 Geometric.liesInsideTriangle(
                         this.points.get(i1),
@@ -198,6 +209,7 @@ public class DelaunayTriangulator {
         edge1.setTriangle(triangleId);
         edge2.setTriangle(triangleId);
         edge3.setTriangle(triangleId);
+        log.info("Created triangle #" + triangleId + ": " + triangles.get(triangleId).toString());
         triangleId++;
         //TODO: legalization and contain points
     }
@@ -252,8 +264,7 @@ public class DelaunayTriangulator {
         Point2D.Double pd = this.points.get(pdId);
         boolean illegal = Geometric.inCircle(pa, pb, pc, pd);
         if (illegal) {
-            //TODO: change point bucket id
-            //
+            log.info("Flipping edges when legalizing edge:" + edge.toString());
             // I checked and it seems that these points are indeed ordered counter-clockwise
             // Flip edge
             // Get points from triangles incident to edge to be flipped and its twin

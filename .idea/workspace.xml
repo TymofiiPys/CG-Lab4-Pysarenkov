@@ -4,10 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="Form last event info">
+    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="do step-by-step calls of triangulator">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/Lab1MenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/Lab1MenuBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayHalfEdge.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayHalfEdge.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,34 +70,10 @@
       <recent name="org.delaunay.GUI" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.GeometricTest">
-    <configuration name="GeometricTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application">
+      <option name="MAIN_CLASS_NAME" value="org.delaunay.GUI.MainWindow" />
       <module name="CG-Lab4-Pysarenkov" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.delaunay.util.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.delaunay.util" />
-      <option name="MAIN_CLASS_NAME" value="org.delaunay.util.GeometricTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="GeometricTest.testInCircle" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="CG-Lab4-Pysarenkov" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="org.delaunay.util.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="org.delaunay.util" />
-      <option name="MAIN_CLASS_NAME" value="org.delaunay.util.GeometricTest" />
-      <option name="METHOD_NAME" value="testInCircle" />
-      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -110,12 +89,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="JUnit.GeometricTest" />
-        <item itemvalue="JUnit.GeometricTest.testInCircle" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -130,7 +103,7 @@
       <workItem from="1716312827794" duration="5468000" />
       <workItem from="1716373493648" duration="7093000" />
       <workItem from="1716406027992" duration="6479000" />
-      <workItem from="1716449933319" duration="3923000" />
+      <workItem from="1716449933319" duration="5307000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -236,7 +209,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716453267215</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="do step-by-step calls of triangulator">
+      <option name="closed" value="true" />
+      <created>1716453916208</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1716453916208</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -256,6 +237,18 @@
     <MESSAGE value="GUI elements and point parsing" />
     <MESSAGE value="DTDrawer" />
     <MESSAGE value="Form last event info" />
-    <option name="LAST_COMMIT_MESSAGE" value="Form last event info" />
+    <MESSAGE value="do step-by-step calls of triangulator" />
+    <option name="LAST_COMMIT_MESSAGE" value="do step-by-step calls of triangulator" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java</url>
+          <line>53</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
