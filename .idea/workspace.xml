@@ -4,10 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="logs and fixes">
+    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="some more fixes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/App.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/util/Geometric.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/util/Geometric.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/org/delaunay/AppTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,24 +39,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary": "JUnit3",
-    "com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3": "junit.framework.TestCase",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "E:/Univ/CompGraphics/CG-Lab4-Pysarenkov/src/main/java/org/delaunay/GUI",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "settings.editor.selected.configurable": "preferences.keymap",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary&quot;: &quot;JUnit3&quot;,
+    &quot;com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit3&quot;: &quot;junit.framework.TestCase&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;last_opened_file_path&quot;: &quot;E:/Univ/CompGraphics/CG-Lab4-Pysarenkov/src/main/java/org/delaunay/GUI&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\Univ\CompGraphics\CG-Lab4-Pysarenkov\src\main\java\org\delaunay\GUI" />
@@ -100,7 +104,8 @@
       <workItem from="1716312827794" duration="5468000" />
       <workItem from="1716373493648" duration="7093000" />
       <workItem from="1716406027992" duration="6479000" />
-      <workItem from="1716449933319" duration="9127000" />
+      <workItem from="1716449933319" duration="11209000" />
+      <workItem from="1716474610157" duration="1861000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -222,7 +227,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716455257777</updated>
     </task>
-    <option name="localTasksCounter" value="16" />
+    <task id="LOCAL-00016" summary="some more fixes">
+      <option name="closed" value="true" />
+      <created>1716460969800</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1716460969800</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -244,17 +257,7 @@
     <MESSAGE value="Form last event info" />
     <MESSAGE value="do step-by-step calls of triangulator" />
     <MESSAGE value="logs and fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="logs and fixes" />
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java</url>
-          <line>68</line>
-          <option name="timeStamp" value="2" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
+    <MESSAGE value="some more fixes" />
+    <option name="LAST_COMMIT_MESSAGE" value="some more fixes" />
   </component>
 </project>

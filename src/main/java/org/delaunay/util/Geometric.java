@@ -3,7 +3,9 @@ package org.delaunay.util;
 import java.awt.geom.Point2D;
 
 public class Geometric {
-    /**
+    /** Returns {@code true} if {@code p} lies inside the circumcircle of triangle abc,
+     * otherwise {@code false}. IMPORTANT: a, b, and c should be ordered counterclockwise,
+     * no reordering is done here, and it's all up to you
      * @param a triangle vertex
      * @param b triangle vertex
      * @param c triangle vertex
@@ -26,38 +28,6 @@ public class Geometric {
         return dx * (ey * cp - bp * fy) -
                 dy * (ex * cp - bp * fx) +
                 ap * (ex * fy - ey * fx) > 0;
-    }
-
-    public static double circumradius(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
-        final double dx = b.x - a.x;
-        final double dy = b.y - a.y;
-        final double ex = c.x - a.x;
-        final double ey = c.y - a.y;
-
-        final double bl = dx * dx + dy * dy;
-        final double cl = ex * ex + ey * ey;
-        final double d = 0.5 / (dx * ey - dy * ex);
-
-        final double x = (ey * bl - dy * cl) * d;
-        final double y = (dx * cl - ex * bl) * d;
-
-        return x * x + y * y;
-    }
-
-    public static Point2D.Double circumcenter(Point2D.Double a, Point2D.Double b, Point2D.Double c) {
-        final double dx = b.x - a.x;
-        final double dy = b.y - a.y;
-        final double ex = c.x - a.x;
-        final double ey = c.y - a.y;
-
-        final double bl = dx * dx + dy * dy;
-        final double cl = ex * ex + ey * ey;
-        final double d = 0.5 / (dx * ey - dy * ex);
-
-        final double x = a.x + (ey * bl - dy * cl) * d;
-        final double y = a.y + (dx * cl - ex * bl) * d;
-
-        return new Point2D.Double(x, y);
     }
 
     public static boolean liesInsideTriangle(Point2D.Double a, Point2D.Double b, Point2D.Double c, Point2D.Double p) {

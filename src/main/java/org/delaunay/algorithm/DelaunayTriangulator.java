@@ -29,12 +29,6 @@ public class DelaunayTriangulator {
     private final HashMap<Pair<Integer, Integer>, DelaunayHalfEdge> halfEdges;
     private String lastEventInfo;
 
-//    private int[] ids;
-
-    private int e1 = 0;
-    private int e2 = 0;
-    private int e3 = 0;
-
     public DelaunayTriangulator(ArrayList<Point2D.Double> points) {
         // Shuffle points because we use Random incremental construction
         this.points = points;
@@ -112,6 +106,11 @@ public class DelaunayTriangulator {
         // https://www.coursera.org/lecture/geometric-algorithms/randomized-incremental-construction-analysis-6l1Pf.
         // The vertices of the magic triangle are stored as nth,
         // n+1st and n+2nd points, they are ordered counter-clockwise.
+
+        // TODO: do same stuff that is in nextEvent cause I changed it quite a lot,
+        //  if you want to get the finished triangulation in one click
+        //  and link it to some button you'll have to create as well
+
         this.halfEdges.clear();
         this.triangles.clear();
 
@@ -166,17 +165,8 @@ public class DelaunayTriangulator {
                             int i2,
                             int i3) {
         // TODO: checking points inside triangle bound by magic triangle vertices
-        // check such degenerate case as one of the passed ids is magic triangle vertex id or dont
-//        final int n = points.size();
-//        if(i1 >= n && i2 >= n) {
-//            if (i1 > i2) {
-//                int temp = i1;
-//                i1 = i2;
-//                i2 = temp;
-//            }
-//            DelaunayHalfEdge edge = this.halfEdges.get(new Pair<>(i1, i2));
-//
-//        }
+        //  if you want to improve the vertices by setting them symbolically,
+        //  because the current stuff requires point coordinates whichever the point is
         return new ArrayList<>(pointList.stream().filter(pt ->
                 Geometric.liesInsideTriangle(
                         this.points.get(i1),
@@ -227,7 +217,6 @@ public class DelaunayTriangulator {
         edge3.setTriangle(triangleId);
         log.info("Created triangle #" + triangleId + ": " + triangles.get(triangleId).toString());
         triangleId++;
-        //TODO: legalization and contain points
     }
 
     private DelaunayHalfEdge createEdgeIfDoesntExist(int startId, int endId, int triangleId) {
@@ -240,10 +229,6 @@ public class DelaunayTriangulator {
             this.halfEdges.put(new Pair<>(startId, endId), edge);
         }
         return edge;
-    }
-
-    private void insertPoint() {
-
     }
 
     /**
@@ -263,27 +248,24 @@ public class DelaunayTriangulator {
         int pdId = -1;
         if (triangleTwin.getId1() != twin.getStart() && triangleTwin.getId1() != twin.getEnd()) {
             pdId = triangleTwin.getId1();
-            e1++;
         } else if (triangleTwin.getId2() != twin.getStart() && triangleTwin.getId2() != twin.getEnd()) {
             pdId = triangleTwin.getId2();
-            e2++;
         } else if (triangleTwin.getId3() != twin.getStart() && triangleTwin.getId3() != twin.getEnd()) {
             pdId = triangleTwin.getId3();
-            e3++;
         } else {
             System.out.println("IMPOSSIBLE");
         }
-        // If the point d belongs to magic triangle, do nothing
-        if(pdId >= points.size() - 3) return;
         // now get the points by their ids and do the incircle test
+        // note: the points a, b and c MUST be ordered counterclockwise
+        // for the check to work correctly
         Point2D.Double pa = this.points.get(pointId);
-        Point2D.Double pb = this.points.get(twin.getStart());
-        Point2D.Double pc = this.points.get(twin.getEnd());
+        Point2D.Double pb = this.points.get(edge.getStart());
+        Point2D.Double pc = this.points.get(edge.getEnd());
         Point2D.Double pd = this.points.get(pdId);
         boolean illegal = Geometric.inCircle(pa, pb, pc, pd);
         if (illegal) {
-            log.info("Flipping edges when legalizing edge:" + edge.toString());
-            // I checked and it seems that these points are indeed ordered counter-clockwise
+            log.info("Flipping edges when legalizing edge:" + edge);
+            // I checked, and it seems that these points are indeed ordered counter-clockwise
             // Flip edge
             // Get points from triangles incident to edge to be flipped and its twin
             ArrayList<DelaunayNotInsertedPoint> pointsInOldSubTrs = triangles.get(edge.getTriangle()).getContainedPoints();
