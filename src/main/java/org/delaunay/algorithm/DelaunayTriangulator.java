@@ -18,6 +18,11 @@ public class DelaunayTriangulator {
     private final ArrayList<DelaunayNotInsertedPoint> notInsertedPoints;
     private int triangleId = 0;
     private int curPointId = 0;
+    // FIXME: instead of assigning concrete values to the magic triangle vertices,
+    //  use symbolic approach. Current approach is used because I haven't figured out
+    //  how to find if point lies inside a triangle where
+    //  at least one vertex is of the magic triangle
+    private final int VERY_VERY_BIG_INT = 100000000;
     /**
      * A hashmap of half-edges that uses half-edge start and endpoint ids as key
      */
@@ -39,20 +44,10 @@ public class DelaunayTriangulator {
         this.triangles = new ArrayList<>();
         this.notInsertedPoints = new ArrayList<>();
         this.halfEdges = new HashMap<>();
-
-//        this.ids = new int[n + 3];
-//        for (int i = 0; i < n; i++) this.ids[i] = i;
-//        this.ids[n] = -3;
-//        this.ids[n + 1] = -2;
-//        this.ids[n + 2] = -1;
-
-//        this.update();
     }
 
     //Called when doing everything step-by-step
     public void nextEvent() {
-        if (curPointId == points.size())
-            return;
         if (curPointId == 0) {
             this.halfEdges.clear();
             this.triangles.clear();
@@ -63,13 +58,17 @@ public class DelaunayTriangulator {
                     this.points.stream().map(
                             point -> new DelaunayNotInsertedPoint(point, 0)
                     ).toList());
+            this.points.add(new Point2D.Double(0, VERY_VERY_BIG_INT));
+            this.points.add(new Point2D.Double(-VERY_VERY_BIG_INT, -VERY_VERY_BIG_INT));
+            this.points.add(new Point2D.Double(VERY_VERY_BIG_INT, -VERY_VERY_BIG_INT));
             //and create the triangle
             this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
 
             log.info("Created list of " + points.size() + " not inserted points");
             log.info("=========================================================");
         }
-
+        if (curPointId == points.size() - 3)
+            return;
         // get ith not-inserted point
         final DelaunayNotInsertedPoint point = this.notInsertedPoints.get(curPointId);
         log.info("Processing " + curPointId + "th point:");
@@ -83,8 +82,8 @@ public class DelaunayTriangulator {
         ArrayList<DelaunayNotInsertedPoint> pointsInTriangle = tr.getContainedPoints();
         // separate the points between three future triangles
         ArrayList<DelaunayNotInsertedPoint> pointsInSubTr1 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), curPointId);
-        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), curPointId);
-        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr3 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), curPointId);
+        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId2(), tr.getId3(), curPointId);
+        ArrayList<DelaunayNotInsertedPoint> pointsInSubTr3 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId3(), tr.getId1(), curPointId);
         // create the triangles
         this.addTriangle(tr.getId1(), tr.getId2(), curPointId, pointsInSubTr1);
         this.addTriangle(tr.getId2(), tr.getId3(), curPointId, pointsInSubTr2);
@@ -93,8 +92,14 @@ public class DelaunayTriangulator {
         this.legalize(this.halfEdges.get(new Pair<>(tr.getId1(), tr.getId2())), curPointId);
         this.legalize(this.halfEdges.get(new Pair<>(tr.getId2(), tr.getId3())), curPointId);
         this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), curPointId);
+        this.formLastEventInfo();
         this.curPointId++;
-        if (curPointId == points.size()) this.notInsertedPoints.clear();
+        if (curPointId == points.size() - 3) {
+            this.notInsertedPoints.clear();
+//            this.points.removeLast();
+//            this.points.removeLast();
+//            this.points.removeLast();
+        }
         log.info("=========================================================");
     }
 
@@ -129,8 +134,8 @@ public class DelaunayTriangulator {
             ArrayList<DelaunayNotInsertedPoint> pointsInTriangle = tr.getContainedPoints();
             // separate the points between three future triangles
             ArrayList<DelaunayNotInsertedPoint> pointsInSubTr1 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
-            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
-            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr3 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId1(), tr.getId2(), i);
+            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr2 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId2(), tr.getId3(), i);
+            ArrayList<DelaunayNotInsertedPoint> pointsInSubTr3 = this.pointsInsideSubTriangle(pointsInTriangle, tr.getId3(), tr.getId1(), i);
             // create the triangles
             this.addTriangle(tr.getId1(), tr.getId2(), i, pointsInSubTr1);
             this.addTriangle(tr.getId2(), tr.getId3(), i, pointsInSubTr2);
@@ -161,14 +166,25 @@ public class DelaunayTriangulator {
                             int i2,
                             int i3) {
         // TODO: checking points inside triangle bound by magic triangle vertices
-        return (ArrayList<DelaunayNotInsertedPoint>) pointList.stream().filter(pt ->
+        // check such degenerate case as one of the passed ids is magic triangle vertex id or dont
+//        final int n = points.size();
+//        if(i1 >= n && i2 >= n) {
+//            if (i1 > i2) {
+//                int temp = i1;
+//                i1 = i2;
+//                i2 = temp;
+//            }
+//            DelaunayHalfEdge edge = this.halfEdges.get(new Pair<>(i1, i2));
+//
+//        }
+        return new ArrayList<>(pointList.stream().filter(pt ->
                 Geometric.liesInsideTriangle(
                         this.points.get(i1),
                         this.points.get(i2),
                         this.points.get(i3),
                         pt.getLocation()
                 ) && !pt.getLocation().equals(this.points.get(i3))
-        ).toList();
+        ).toList());
     }
 
     /**
@@ -257,6 +273,8 @@ public class DelaunayTriangulator {
         } else {
             System.out.println("IMPOSSIBLE");
         }
+        // If the point d belongs to magic triangle, do nothing
+        if(pdId >= points.size() - 3) return;
         // now get the points by their ids and do the incircle test
         Point2D.Double pa = this.points.get(pointId);
         Point2D.Double pb = this.points.get(twin.getStart());
@@ -286,6 +304,8 @@ public class DelaunayTriangulator {
             // Legalize them :)
             this.legalize(this.halfEdges.get(new Pair<>(twin.getEnd(), pdId)), pointId);
             this.legalize(this.halfEdges.get(new Pair<>(pdId, twin.getStart())), pointId);
+            this.halfEdges.remove(new Pair<>(edge.getStart(), edge.getEnd()));
+            this.halfEdges.remove(new Pair<>(twin.getStart(), twin.getEnd()));
         }
     }
 

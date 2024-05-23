@@ -69,6 +69,8 @@ public class DTDrawer {
         gr.setColor(edgesColor);
         ArrayList<Point2D.Double> points = DT.getPoints();
         for (Pair<Integer, Integer> edge : DT.getHalfEdges().keySet()) {
+//            if(edge.getKey() >= points.size() - 3 || edge.getValue() >= points.size() - 3)
+//                continue;
             Point2D.Double startAdapted = adaptToPanel(points.get(edge.getKey()), panelOffsets);
             Point2D.Double endAdapted = adaptToPanel(points.get(edge.getValue()), panelOffsets);
             gr.drawLine((int) startAdapted.x, (int) startAdapted.y, (int) endAdapted.x, (int) endAdapted.y);
@@ -79,11 +81,18 @@ public class DTDrawer {
             Point2D.Double p = adaptToPanel(points.get(i), panelOffsets);
             gr.fillOval((int) (p.x - nodesRad), (int) (p.y - nodesRad), 2 * nodesRad, 2 * nodesRad);
         }
-        // Draw inserted points
+        // Draw notinserted points
         gr.setColor(notInsertedPointColor);
-        for (int i = DT.getCurPointId(); i < points.size(); i++) {
+        for (int i = DT.getCurPointId(); i < points.size() - 3; i++) {
             Point2D.Double p = adaptToPanel(points.get(i), panelOffsets);
             gr.fillOval((int) (p.x - nodesRad), (int) (p.y - nodesRad), 2 * nodesRad, 2 * nodesRad);
+        }
+        if(DT.getCurPointId() == 0) {
+            gr.setColor(notInsertedPointColor);
+            for (int i = 0; i < points.size(); i++) {
+                Point2D.Double p = adaptToPanel(points.get(i), panelOffsets);
+                gr.fillOval((int) (p.x - nodesRad), (int) (p.y - nodesRad), 2 * nodesRad, 2 * nodesRad);
+            }
         }
     }
 
@@ -91,7 +100,7 @@ public class DTDrawer {
         DT.nextEvent();
         this.drawDT();
         return new DTInfo(
-                DT.getPoints().size(),
+                DT.getPoints().size() - 3,
                 DT.getCurPointId() - 1,
                 DT.getLastEventInfo()
         );
