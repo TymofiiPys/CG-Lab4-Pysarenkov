@@ -1,8 +1,6 @@
 package org.delaunay.GUI;
 
-//import org.example.regtree.RTree2D;
-
-import org.cglab3.util.SegmentParser;
+import org.delaunay.util.PointParser;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
@@ -26,9 +24,9 @@ public class Lab1MenuBar extends JMenuBar {
             }
         };
         openMI.addActionListener(new OpenFileDialogActionListener(parent, textFilesFilter, filePath, () -> {
-            mw.BODrawer.setSegments(SegmentParser.readFromFile(filePath.toString()));
+            mw.dtDrawer.setPoints(PointParser.readFromFile(filePath.toString()));
             mw.nextEventButton.setEnabled(true);
-            mw.BODrawer.drawBO();
+            mw.dtDrawer.drawDT();
             mw.clearEventBoxes();
         }));
         JMenuItem exitMI = new JMenuItem("Вийти");

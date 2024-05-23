@@ -1,9 +1,6 @@
 package org.delaunay.GUI;
 
-//import org.example.GUI.Lab1MenuBar;
-//import org.example.GUI.RegTreeDrawer;
-
-import org.cglab3.BentleyOttmann.BOInfo;
+import org.delaunay.algorithm.DTInfo;
 
 import javax.swing.*;
 import java.awt.*;
@@ -26,22 +23,22 @@ public class MainWindow extends Container {
     private JLabel nEventsLabel;
     private JLabel eventInfoLabel;
     public final Dimension mainWindowDims = new Dimension(600, 500);
-    public final BODrawer BODrawer;
+    public final DTDrawer dtDrawer;
 
     public MainWindow() {
         nextEventButton.setText("Наступна подія");
         nextEventButton.setEnabled(false);
 
-        BODrawer = new BODrawer(graphicsPanel);
+        dtDrawer = new DTDrawer(graphicsPanel);
 
         //button action listeners
         nextEventButton.addActionListener(e -> {
-            if (BODrawer.BOSet()) {
-                BOInfo info = BODrawer.nextEvent();
-                nEventsLabel.setText("Оброблено подій: " + info.getNEvents());
-                nIntersectionsLabel.setText("З них перетинів: " + info.getNIntersections());
+            if (dtDrawer.DTSet()) {
+                DTInfo info = dtDrawer.nextEvent();
+                nEventsLabel.setText("Усього точок: " + info.getTotalPts());
+                nIntersectionsLabel.setText("З них вставлено: " + info.getInsertedPts());
                 eventInfoLabel.setText(info.getLastEventInfo());
-                if (!BODrawer.checkNextEvent()) {
+                if (!dtDrawer.checkNextEvent()) {
                     nextEventButton.setEnabled(false);
                 }
             }
@@ -52,8 +49,8 @@ public class MainWindow extends Container {
                 try {
                     int offset1 = Integer.parseInt(offset1TextField.getText());
                     int offset2 = Integer.parseInt(offset2TextField.getText());
-                    BODrawer.setOffsets(new int[]{offset1, offset2});
-                    BODrawer.drawBO();
+                    dtDrawer.setOffsets(new int[]{offset1, offset2});
+                    dtDrawer.drawDT();
                 } catch (NumberFormatException ignored) {
                 }
             }
@@ -64,8 +61,8 @@ public class MainWindow extends Container {
             @Override
             public void componentResized(ComponentEvent e) {
                 super.componentResized(e);
-                if (BODrawer.BOSet()) {
-                    BODrawer.drawBO();
+                if (dtDrawer.DTSet()) {
+                    dtDrawer.drawDT();
                 }
             }
         });
@@ -87,9 +84,5 @@ public class MainWindow extends Container {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
-    }
-
-    private void createUIComponents() {
-        // TODO: place custom component creation code here
     }
 }

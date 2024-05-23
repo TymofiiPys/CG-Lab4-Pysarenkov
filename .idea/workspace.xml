@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="some commentos">
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/Lab1MenuBar.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/MainWindow.form" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/MainWindow.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/OpenFileDialogActionListener.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/util/PointParser.java" afterDir="false" />
+    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="GUI elements and point parsing">
+      <change afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DTInfo.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/Lab1MenuBar.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/Lab1MenuBar.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/MainWindow.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -133,7 +133,7 @@
       <workItem from="1716312827794" duration="5468000" />
       <workItem from="1716373493648" duration="7093000" />
       <workItem from="1716406027992" duration="6479000" />
-      <workItem from="1716449933319" duration="848000" />
+      <workItem from="1716449933319" duration="2750000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -215,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716413395078</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="GUI elements and point parsing">
+      <option name="closed" value="true" />
+      <created>1716450819965</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1716450819965</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -232,6 +240,7 @@
     <MESSAGE value="triangulation rework" />
     <MESSAGE value="triangulation almost finished" />
     <MESSAGE value="some commentos" />
-    <option name="LAST_COMMIT_MESSAGE" value="some commentos" />
+    <MESSAGE value="GUI elements and point parsing" />
+    <option name="LAST_COMMIT_MESSAGE" value="GUI elements and point parsing" />
   </component>
 </project>

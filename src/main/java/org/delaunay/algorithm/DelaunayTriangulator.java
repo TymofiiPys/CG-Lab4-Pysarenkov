@@ -6,13 +6,18 @@ import java.util.Collections;
 import java.util.HashMap;
 
 import javafx.util.Pair;
+import lombok.Getter;
+import lombok.extern.java.Log;
 import org.delaunay.util.Geometric;
 
+@Log
+@Getter
 public class DelaunayTriangulator {
     private final ArrayList<Point2D.Double> points;
     private final ArrayList<Triangle> triangles;
     private final ArrayList<DelaunayNotInsertedPoint> notInsertedPoints;
     private int triangleId = 0;
+    private int curPointId = 0;
     /**
      * A hashmap of half-edges that uses half-edge start and endpoint ids as key
      */
@@ -83,6 +88,7 @@ public class DelaunayTriangulator {
             this.legalize(this.halfEdges.get(new Pair<>(tr.getId1(), tr.getId2())), id);
             this.legalize(this.halfEdges.get(new Pair<>(tr.getId2(), tr.getId3())), id);
             this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), id);
+            this.curPointId = i;
         }
 
         this.notInsertedPoints.clear();
