@@ -4,10 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="final touches by me">
+    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="store points array size as n">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/MainWindow.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/MainWindow.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -102,7 +101,8 @@
       <workItem from="1716406027992" duration="6479000" />
       <workItem from="1716449933319" duration="11209000" />
       <workItem from="1716474610157" duration="1906000" />
-      <workItem from="1716530254019" duration="255000" />
+      <workItem from="1716530254019" duration="1860000" />
+      <workItem from="1716533920391" duration="113000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -240,7 +240,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716476508813</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="store points array size as n">
+      <option name="closed" value="true" />
+      <created>1716530586152</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1716530586152</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -264,6 +272,7 @@
     <MESSAGE value="logs and fixes" />
     <MESSAGE value="some more fixes" />
     <MESSAGE value="final touches by me" />
-    <option name="LAST_COMMIT_MESSAGE" value="final touches by me" />
+    <MESSAGE value="store points array size as n" />
+    <option name="LAST_COMMIT_MESSAGE" value="store points array size as n" />
   </component>
 </project>

@@ -111,7 +111,7 @@
                   <text value="Застосувати зсув"/>
                 </properties>
               </component>
-              <component id="2a89" class="javax.swing.JLabel" binding="nEventsLabel">
+              <component id="2a89" class="javax.swing.JLabel" binding="nPointsLabel">
                 <constraints>
                   <grid row="5" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>
@@ -119,7 +119,7 @@
                   <text value=""/>
                 </properties>
               </component>
-              <component id="72d1c" class="javax.swing.JLabel" binding="nIntersectionsLabel">
+              <component id="72d1c" class="javax.swing.JLabel" binding="nInsertionsLabel">
                 <constraints>
                   <grid row="6" column="0" row-span="1" col-span="2" vsize-policy="0" hsize-policy="0" anchor="8" fill="0" indent="0" use-parent-layout="false"/>
                 </constraints>

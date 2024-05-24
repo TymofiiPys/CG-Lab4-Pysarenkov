@@ -19,13 +19,15 @@ public class MainWindow extends Container {
     private JTextField offset2TextField;
     private JPanel controlsInsidePanel;
     private JButton applyOffsetsButton;
-    private JLabel nIntersectionsLabel;
-    private JLabel nEventsLabel;
+    private JLabel nInsertionsLabel;
+    private JLabel nPointsLabel;
     private JLabel eventInfoLabel;
     public final Dimension mainWindowDims = new Dimension(600, 500);
     public final DTDrawer dtDrawer;
 
     public MainWindow() {
+        // TODO: labels are in Ukrainian, but if you look at the code,
+        //  these are self-explanatory. If you wish, translate into English.
         nextEventButton.setText("Наступна подія");
         nextEventButton.setEnabled(false);
 
@@ -35,8 +37,8 @@ public class MainWindow extends Container {
         nextEventButton.addActionListener(e -> {
             if (dtDrawer.DTSet()) {
                 DTInfo info = dtDrawer.nextEvent();
-                nEventsLabel.setText("Усього точок: " + info.getTotalPts());
-                nIntersectionsLabel.setText("З них вставлено: " + info.getInsertedPts());
+                nPointsLabel.setText("Усього точок: " + info.getTotalPts());
+                nInsertionsLabel.setText("З них вставлено: " + info.getInsertedPts());
                 eventInfoLabel.setText(info.getLastEventInfo());
                 if (!dtDrawer.checkNextEvent()) {
                     nextEventButton.setEnabled(false);
@@ -69,12 +71,12 @@ public class MainWindow extends Container {
     }
 
     public void clearEventBoxes() {
-        this.nEventsLabel.setText("");
-        this.nIntersectionsLabel.setText("");
+        this.nPointsLabel.setText("");
+        this.nInsertionsLabel.setText("");
     }
 
     public static void main(String[] args) {
-        JFrame frame = new JFrame("ЛР№3. Перетин відрізків на площині (Bentley–Ottmann).");
+        JFrame frame = new JFrame("ЛР№4. Триангуляція Делоне – рандомізований інкрементний алгоритм.");
         MainWindow mw = new MainWindow();
         Lab1MenuBar menuBar = new Lab1MenuBar(frame, mw);
         frame.setJMenuBar(menuBar);
