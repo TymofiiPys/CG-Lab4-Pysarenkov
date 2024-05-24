@@ -28,6 +28,7 @@ public class DelaunayTriangulator {
      */
     private final HashMap<Pair<Integer, Integer>, DelaunayHalfEdge> halfEdges;
     private String lastEventInfo;
+    private int n;
 
     public DelaunayTriangulator(ArrayList<Point2D.Double> points) {
         // Shuffle points because we use Random incremental construction
@@ -46,7 +47,7 @@ public class DelaunayTriangulator {
             this.halfEdges.clear();
             this.triangles.clear();
 
-            final int n = points.size();
+            n = points.size();
             // link all points to the triangle
             this.notInsertedPoints.addAll(
                     this.points.stream().map(
@@ -58,10 +59,10 @@ public class DelaunayTriangulator {
             //and create the triangle
             this.addTriangle(n, n + 1, n + 2, this.notInsertedPoints);
 
-            log.info("Created list of " + points.size() + " not inserted points");
+            log.info("Created list of " + n + " not inserted points");
             log.info("=========================================================");
         }
-        if (curPointId == points.size() - 3)
+        if (curPointId == n)
             return;
         // get ith not-inserted point
         final DelaunayNotInsertedPoint point = this.notInsertedPoints.get(curPointId);
@@ -88,7 +89,7 @@ public class DelaunayTriangulator {
         this.legalize(this.halfEdges.get(new Pair<>(tr.getId3(), tr.getId1())), curPointId);
         this.formLastEventInfo();
         this.curPointId++;
-        if (curPointId == points.size() - 3) {
+        if (curPointId == n) {
             this.notInsertedPoints.clear();
 //            this.points.removeLast();
 //            this.points.removeLast();

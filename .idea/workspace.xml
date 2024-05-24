@@ -4,14 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="some more fixes">
+    <list default="true" id="14ad5afa-99fb-4c47-a835-8478ab3348e5" name="Changes" comment="final touches by me">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/App.java" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/GUI/DTDrawer.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/DelaunayTriangulator.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/algorithm/Triangle.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/delaunay/util/Geometric.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/delaunay/util/Geometric.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/delaunay/AppTest.java" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -105,7 +101,8 @@
       <workItem from="1716373493648" duration="7093000" />
       <workItem from="1716406027992" duration="6479000" />
       <workItem from="1716449933319" duration="11209000" />
-      <workItem from="1716474610157" duration="1861000" />
+      <workItem from="1716474610157" duration="1906000" />
+      <workItem from="1716530254019" duration="255000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -235,7 +232,15 @@
       <option name="project" value="LOCAL" />
       <updated>1716460969800</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="final touches by me">
+      <option name="closed" value="true" />
+      <created>1716476508813</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1716476508813</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -258,6 +263,7 @@
     <MESSAGE value="do step-by-step calls of triangulator" />
     <MESSAGE value="logs and fixes" />
     <MESSAGE value="some more fixes" />
-    <option name="LAST_COMMIT_MESSAGE" value="some more fixes" />
+    <MESSAGE value="final touches by me" />
+    <option name="LAST_COMMIT_MESSAGE" value="final touches by me" />
   </component>
 </project>

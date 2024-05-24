@@ -68,7 +68,7 @@ public class DTDrawer {
         gr.setColor(edgesColor);
         ArrayList<Point2D.Double> points = DT.getPoints();
         for (Pair<Integer, Integer> edge : DT.getHalfEdges().keySet()) {
-            if(edge.getKey() >= points.size() - 3 || edge.getValue() >= points.size() - 3)
+            if(edge.getKey() >= DT.getN()|| edge.getValue() >= DT.getN())
                 // don't draw edges with the magic triangle vertices as endpoints
                 continue;
             Point2D.Double startAdapted = adaptToPanel(points.get(edge.getKey()), panelOffsets);
@@ -84,7 +84,7 @@ public class DTDrawer {
         }
         // Draw not inserted points
         gr.setColor(notInsertedPointColor);
-        for (int i = DT.getCurPointId(); i < points.size() - 3; i++) {
+        for (int i = DT.getCurPointId(); i < DT.getN(); i++) {
             Point2D.Double p = adaptToPanel(points.get(i), panelOffsets);
             gr.fillOval((int) (p.x - nodesRad), (int) (p.y - nodesRad), 2 * nodesRad, 2 * nodesRad);
         }
@@ -101,7 +101,7 @@ public class DTDrawer {
         DT.nextEvent();
         this.drawDT();
         return new DTInfo(
-                DT.getPoints().size() - 3,
+                DT.getN(),
                 DT.getCurPointId(),
                 DT.getLastEventInfo()
         );
